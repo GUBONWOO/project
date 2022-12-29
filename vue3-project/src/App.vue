@@ -2,20 +2,20 @@
   <div class="container">
     <h2>To-DO List</h2>
     <input
-      v-model="serachText"
-      placeholder="search"
+      v-model="searchText"
+      placeholder="Search"
       class="form-control"
       type="text"
     />
     <hr />
     <TodoSimpleForm @add-todo="addTodo" />
-    <div>{{ error }}</div>
+    <div style="color: red">{{ error }}</div>
 
     <div v-if="!filteredTodos.length">no</div>
     <TodoList
       :todos="filteredTodos"
       @toggle-todo="toggleTodo"
-      @delete-todo="deleteTodo(index)"
+      @delete-todo="deleteTodo"
     />
   </div>
 </template>
@@ -76,22 +76,21 @@ export default {
       todos.value[index].completed = !todos.value[index].completed
     }
 
-    const serachText = ref('')
+    const searchText = ref('')
     const filteredTodos = computed(() => {
-      if (serachText.value) {
+      if (searchText.value) {
         return todos.value.filter((todo) => {
-          return todo.subject.includes(serachText.value)
+          return todo.subject.includes(searchText.value)
         })
       }
       return todos.value
     })
-
     return {
       todos,
       addTodo,
       deleteTodo,
       toggleTodo,
-      serachText,
+      searchText,
       filteredTodos,
       error
     }
