@@ -1,16 +1,6 @@
 {
   "todos": [
     {
-      "subject": "sadad",
-      "completed": false,
-      "id": 2
-    },
-    {
-      "subject": "고쳤당",
-      "completed": false,
-      "id": 3
-    },
-    {
       "subject": "우리오빠야",
       "completed": false,
       "id": 4
@@ -22,13 +12,48 @@
     },
     {
       "subject": "함께 공부하기",
-      "completed": false,
+      "completed": true,
       "id": 6
     },
     {
       "subject": "^.~❤️",
-      "completed": false,
+      "completed": true,
       "id": 7
+    },
+    {
+      "subject": "1",
+      "completed": false,
+      "id": 8
+    },
+    {
+      "subject": "2",
+      "completed": false,
+      "id": 9
+    },
+    {
+      "subject": "3",
+      "completed": false,
+      "id": 10
+    },
+    {
+      "subject": "4",
+      "completed": false,
+      "id": 11
+    },
+    {
+      "subject": "5",
+      "completed": false,
+      "id": 12
+    },
+    {
+      "subject": "6",
+      "completed": false,
+      "id": 13
+    },
+    {
+      "subject": "dd",
+      "completed": false,
+      "id": 14
     }
   ]
 }
