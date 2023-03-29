@@ -6,14 +6,15 @@
       placeholder="Search"
       class="form-control"
       type="text"
+      @keyup.enter="searchTodo"
     />
     <hr />
     <TodoSimpleForm @add-todo="addTodo" />
     <div style="color: red">{{ error }}</div>
 
-    <div v-if="!filteredTodos.length">no</div>
+    <div v-if="!todos.length">no</div>
     <TodoList
-      :todos="filteredTodos"
+      :todos="todos"
       @toggle-todo="toggleTodo"
       @delete-todo="deleteTodo"
     />
@@ -71,24 +72,11 @@ export default {
     const todos = ref([])
     const error = ref('')
     const numberOfTodos = ref(0)
-    let limit = 5
+    const limit = 5
     const currentPage = ref(1)
-    // const a = reactive({
-    //   b: 1,
-    //   c: 3
-    // })
-    // watch(
-    //   () => [a.b, a.c],
-    //   (current, prev) => {
-    //     console.log(current, prev)
-    //   }
-    // )
-    // a.b = 2
 
-    watch([currentPage, numberOfTodos], (currentPage, prev) => {
-      console.log(currentPage, prev)
-    })
-    limit = 3
+    const searchText = ref('')
+
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit)
     })
@@ -104,7 +92,7 @@ export default {
       currentPage.value = page
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
+          `http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
         )
         numberOfTodos.value = res.headers['x-total-count']
         todos.value = res.data
@@ -119,11 +107,12 @@ export default {
     const addTodo = async (todo) => {
       error.value = ''
       try {
-        const res = await axios.post('http://localhost:3000/todos', {
+        await axios.post('http://localhost:3000/todos', {
           subject: todo.subject,
           completed: todo.completed
         })
-        todos.value.push(res.data)
+
+        getTodos(1)
       } catch (err) {
         error.value = 'Wrong'
       }
@@ -135,7 +124,7 @@ export default {
       try {
         await axios.delete('http://localhost:3000/todos/' + id)
 
-        todos.value.splice(index, 1)
+        getTodos(1)
       } catch (err) {
         console.log(err)
         error.value = 'Wrong'
@@ -156,22 +145,26 @@ export default {
       }
     }
 
-    const searchText = ref('')
-    const filteredTodos = computed(() => {
-      if (searchText.value) {
-        return todos.value.filter((todo) => {
-          return todo.subject.includes(searchText.value)
-        })
-      }
-      return todos.value
+    let timeout = null
+    const searchTodo = () => {
+      clearTimeout(timeout)
+      getTodos(1)
+    }
+    watch(searchText, () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        getTodos(1)
+      }, 2000)
     })
+
     return {
+      searchTodo,
       todos,
       addTodo,
       deleteTodo,
       toggleTodo,
       searchText,
-      filteredTodos,
+      // filteredTodos,
       error,
       numberOfPages,
       currentPage,
@@ -187,5 +180,3 @@ export default {
   text-decoration: line-through;
 }
 </style>
-
-name(()= >{ asdadadad })
